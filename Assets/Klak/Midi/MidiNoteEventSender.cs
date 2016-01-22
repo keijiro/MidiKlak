@@ -31,9 +31,17 @@ namespace Klak.Midi
     {
         #region Nested Public Classes
 
-        public enum VoiceMode { Mono, Poly }
+        public enum EventType {
+            Trigger, Gate, Toggle, Value
+        }
 
-        public enum FilterMode { Off, NoteName, NoteNumber }
+        public enum VoiceMode {
+            Mono, Poly
+        }
+
+        public enum FilterMode {
+            Off, NoteName, NoteNumber
+        }
 
         public enum NoteName {
             C, CSharp, D, DSharp, E, F, FSharp, G, GSharp, A, ASharp, B
@@ -45,9 +53,15 @@ namespace Klak.Midi
         [System.Serializable]
         public class NoteOffEvent : UnityEvent<int> {}
 
+        [System.Serializable]
+        public class ValueEvent : UnityEvent<float> {}
+
         #endregion
 
         #region Editable Properties
+
+        [SerializeField]
+        EventType _eventType = EventType.Trigger;
 
         [SerializeField]
         MidiChannel _channel = MidiChannel.All;
@@ -68,16 +82,39 @@ namespace Klak.Midi
         int _highestNote = 60; // C4
 
         [SerializeField]
+        float _offValue = 0.0f;
+
+        [SerializeField]
+        float _onValue = 1.0f;
+
+        [SerializeField]
+        FloatInterpolator.Config _interpolator;
+
+        [SerializeField]
+        ValueEvent _triggerEvent;
+
+        [SerializeField]
         NoteOnEvent _noteOnEvent;
 
         [SerializeField]
         NoteOffEvent _noteOffEvent;
+
+        [SerializeField]
+        UnityEvent _toggleOnEvent;
+
+        [SerializeField]
+        UnityEvent _toggleOffEvent;
+
+        [SerializeField]
+        ValueEvent _valueEvent;
 
         #endregion
 
         #region Private Properties And Variables
 
         int _lastNote = -1;
+        FloatInterpolator _value;
+        bool _toggle;
 
         bool CompareNoteToName(int number, NoteName name)
         {
@@ -96,7 +133,13 @@ namespace Klak.Midi
 
 		void NoteOn(MidiChannel channel, int note, float velocity)
         {
-            if (FilterNote(channel, note))
+            if (!FilterNote(channel, note)) return;
+
+            if (_eventType == EventType.Trigger)
+            {
+                _triggerEvent.Invoke(velocity);
+            }
+            else if (_eventType == EventType.Gate)
             {
                 if (_voiceMode == VoiceMode.Mono &&
                     _lastNote != -1 && _lastNote != note)
@@ -105,17 +148,35 @@ namespace Klak.Midi
                 _noteOnEvent.Invoke(note, velocity);
                 _lastNote = note;
             }
+            else if (_eventType == EventType.Toggle)
+            {
+                _toggle ^= true;
+                if (_toggle)
+                    _toggleOnEvent.Invoke();
+                else
+                    _toggleOffEvent.Invoke();
+            }
+            else // EventType.Value
+            {
+                _value.targetValue = _onValue * velocity;
+            }
         }
 
         void NoteOff(MidiChannel channel, int note)
         {
-            if (FilterNote(channel, note))
+            if (!FilterNote(channel, note)) return;
+
+            if (_eventType == EventType.Gate)
             {
                 if (_voiceMode == VoiceMode.Poly || _lastNote == note)
                 {
                     _noteOffEvent.Invoke(note);
                     _lastNote = -1;
                 }
+            }
+            else if (_eventType == EventType.Value)
+            {
+                _value.targetValue = _offValue;
             }
         }
 
@@ -133,6 +194,17 @@ namespace Klak.Midi
         {
             MidiMaster.noteOnDelegate -= NoteOn;
             MidiMaster.noteOffDelegate -= NoteOff;
+        }
+
+        void Start()
+        {
+            _value = new FloatInterpolator(0, _interpolator);
+        }
+
+        void Update()
+        {
+            if (_eventType == EventType.Value)
+                _valueEvent.Invoke(_value.Step());
         }
 
         #endregion

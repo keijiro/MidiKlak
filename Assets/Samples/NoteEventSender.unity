@@ -132,6 +132,10 @@ MonoBehaviour:
   _rotationAxis: {x: 0, y: 1, z: 0}
   _rotationAngle0: 0
   _rotationAngle1: 90
+  _scaleMode: 0
+  _scaleVector: {x: 1, y: 1, z: 1}
+  _scaleAmount0: 0
+  _scaleAmount1: 1
   _targetTransform: {fileID: 1550618074}
   _addToOriginal: 1
 --- !u!1 &130453091
@@ -169,6 +173,10 @@ MonoBehaviour:
   _rotationAxis: {x: 0, y: 1, z: 0}
   _rotationAngle0: 0
   _rotationAngle1: 90
+  _scaleMode: 0
+  _scaleVector: {x: 1, y: 1, z: 1}
+  _scaleAmount0: 0
+  _scaleAmount1: 1
   _targetTransform: {fileID: 1878205202}
   _addToOriginal: 1
 --- !u!4 &130453093
@@ -468,6 +476,10 @@ MonoBehaviour:
   _rotationAxis: {x: 0, y: 1, z: 0}
   _rotationAngle0: 0
   _rotationAngle1: 90
+  _scaleMode: 0
+  _scaleVector: {x: 1, y: 1, z: 1}
+  _scaleAmount0: 0
+  _scaleAmount1: 1
   _targetTransform: {fileID: 822673829}
   _addToOriginal: 1
 --- !u!1 &634772582
@@ -706,12 +718,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3224c2e84c1ec467b9cf2927b50e9f09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _eventType: 1
   _channel: 16
   _voiceMode: 1
   _filterMode: 0
   _noteName: 4
   _lowestNote: 40
   _highestNote: 42
+  _offValue: 0
+  _onValue: 1
+  _interpolator:
+    _interpolationType: 2
+    _interpolationSpeed: 5
+  _triggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Klak.Midi.MidiNoteEventSender+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   _noteOnEvent:
     m_PersistentCalls:
       m_Calls:
@@ -743,6 +766,21 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: Klak.Midi.MidiNoteEventSender+NoteOffEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  _toggleOnEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  _toggleOffEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  _valueEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Klak.Midi.MidiNoteEventSender+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!4 &1174095248
 Transform:
@@ -807,6 +845,10 @@ MonoBehaviour:
   _rotationAxis: {x: 0, y: 1, z: 0}
   _rotationAngle0: 0
   _rotationAngle1: 90
+  _scaleMode: 0
+  _scaleVector: {x: 1, y: 1, z: 1}
+  _scaleAmount0: 0
+  _scaleAmount1: 1
   _targetTransform: {fileID: 634772585}
   _addToOriginal: 1
 --- !u!1 &1550618071
