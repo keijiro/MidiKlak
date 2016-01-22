@@ -721,7 +721,7 @@ MonoBehaviour:
   _eventType: 1
   _channel: 16
   _voiceMode: 1
-  _filterMode: 0
+  _noteFilter: 0
   _noteName: 4
   _lowestNote: 40
   _highestNote: 42

@@ -39,7 +39,7 @@ namespace Klak.Midi
             Mono, Poly
         }
 
-        public enum FilterMode {
+        public enum NoteFilter {
             Off, NoteName, NoteNumber
         }
 
@@ -70,7 +70,7 @@ namespace Klak.Midi
         VoiceMode _voiceMode = VoiceMode.Mono;
 
         [SerializeField]
-        FilterMode _filterMode = FilterMode.Off;
+        NoteFilter _noteFilter = NoteFilter.Off;
 
         [SerializeField]
         NoteName _noteName;
@@ -124,10 +124,10 @@ namespace Klak.Midi
         bool FilterNote(MidiChannel channel, int note)
         {
             if (_channel != MidiChannel.All && channel != _channel) return false;
-            if (_filterMode == FilterMode.Off) return true;
-            if (_filterMode == FilterMode.NoteName)
+            if (_noteFilter == NoteFilter.Off) return true;
+            if (_noteFilter == NoteFilter.NoteName)
                 return CompareNoteToName(note, _noteName);
-            else // FilterMode.Number
+            else // NoteFilter.Number
                 return _lowestNote <= note && note <= _highestNote;
         }
 
