@@ -33,6 +33,7 @@ namespace Klak.Midi
         SerializedProperty _eventType;
         SerializedProperty _channel;
         SerializedProperty _voiceMode;
+        SerializedProperty _velocityCurve;
 
         SerializedProperty _noteFilter;
         SerializedProperty _noteName;
@@ -50,11 +51,15 @@ namespace Klak.Midi
         SerializedProperty _toggleOffEvent;
         SerializedProperty _valueEvent;
 
+        Vector3[] _rectVertices;
+        Vector3[] _lineVertices;
+
         void OnEnable()
         {
             _eventType = serializedObject.FindProperty("_eventType");
             _channel = serializedObject.FindProperty("_channel");
             _voiceMode = serializedObject.FindProperty("_voiceMode");
+            _velocityCurve = serializedObject.FindProperty("_velocityCurve");
 
             _noteFilter = serializedObject.FindProperty("_noteFilter");
             _noteName = serializedObject.FindProperty("_noteName");
@@ -71,6 +76,9 @@ namespace Klak.Midi
             _toggleOnEvent = serializedObject.FindProperty("_toggleOnEvent");
             _toggleOffEvent = serializedObject.FindProperty("_toggleOffEvent");
             _valueEvent = serializedObject.FindProperty("_valueEvent");
+
+            _rectVertices = new Vector3[4];
+            _lineVertices = new Vector3[50];
         }
 
         public override void OnInspectorGUI()
@@ -108,6 +116,14 @@ namespace Klak.Midi
             }
 
             if (showAllEvents ||
+                eventType != MidiNoteEventSender.EventType.Toggle)
+            {
+                EditorGUILayout.PropertyField(_velocityCurve);
+                if (!_velocityCurve.hasMultipleDifferentValues)
+                    DrawVelocityCurve(_velocityCurve.floatValue);
+            }
+
+            if (showAllEvents ||
                 eventType == MidiNoteEventSender.EventType.Value)
             {
                 EditorGUILayout.PropertyField(_offValue);
@@ -142,6 +158,49 @@ namespace Klak.Midi
             }
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        void DrawVelocityCurve(float coeff)
+        {
+            var height = EditorGUIUtility.singleLineHeight +
+                EditorGUIUtility.standardVerticalSpacing * 2;
+
+            var rect = GUILayoutUtility.GetRect(128, height);
+
+            // label area
+            rect.x += EditorGUIUtility.labelWidth;
+            rect.width -= EditorGUIUtility.labelWidth;
+
+            // line space
+            rect.y += EditorGUIUtility.standardVerticalSpacing;
+            rect.height -= EditorGUIUtility.standardVerticalSpacing * 2;
+
+            // background
+            _rectVertices[0] = new Vector3(rect.x, rect.y);
+            _rectVertices[1] = new Vector3(rect.xMax, rect.y);
+            _rectVertices[2] = new Vector3(rect.xMax, rect.yMax);
+            _rectVertices[3] = new Vector3(rect.x, rect.yMax);
+
+            Handles.DrawSolidRectangleWithOutline(
+                _rectVertices, Color.white * 0.1f, Color.clear);
+
+            // curve
+            for (var i = 0; i < _lineVertices.Length; i++)
+            {
+                var x = (float)i / (_lineVertices.Length - 1);
+                var y = MidiNoteEventSender.VelocityCurve(x, coeff);
+                _lineVertices[i] = PointInRect(rect, x, y);
+            }
+
+            // draw the line
+            Handles.DrawAAPolyLine(2.0f, _lineVertices);
+        }
+
+        Vector3 PointInRect(Rect rect, float x, float y)
+        {
+            return new Vector3(
+                Mathf.Lerp(rect.x, rect.xMax, x),
+                Mathf.Lerp(rect.y, rect.yMax, 1 - y), 0);
         }
     }
 }

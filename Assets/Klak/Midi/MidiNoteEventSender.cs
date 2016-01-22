@@ -81,6 +81,9 @@ namespace Klak.Midi
         [SerializeField]
         int _highestNote = 60; // C4
 
+        [SerializeField, Range(0, 2)]
+        float _velocityCurve = 1.0f;
+
         [SerializeField]
         float _offValue = 0.0f;
 
@@ -110,6 +113,19 @@ namespace Klak.Midi
 
         #endregion
 
+        #region Public Functions
+
+        // velocity curve function, mainly exposed for the editor.
+        public static float VelocityCurve(float velocity, float coeff)
+        {
+            if (coeff <= 1)
+                return Mathf.Pow(velocity, (1 - coeff) * 10 + 1);
+            else
+                return 1 - Mathf.Pow(1 - velocity, (coeff - 1) * 10 + 1);
+        }
+
+        #endregion
+
         #region Private Properties And Variables
 
         int _lastNote = -1;
@@ -134,6 +150,8 @@ namespace Klak.Midi
 		void NoteOn(MidiChannel channel, int note, float velocity)
         {
             if (!FilterNote(channel, note)) return;
+
+            velocity = VelocityCurve(velocity, _velocityCurve);
 
             if (_eventType == EventType.Trigger)
             {
