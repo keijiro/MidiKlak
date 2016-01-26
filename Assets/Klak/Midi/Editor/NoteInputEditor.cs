@@ -27,8 +27,8 @@ using UnityEditor;
 namespace Klak.Midi
 {
     [CanEditMultipleObjects]
-    [CustomEditor(typeof(MidiNoteEventSender))]
-    public class MidiNoteEventSenderEditor : Editor
+    [CustomEditor(typeof(NoteInput))]
+    public class NoteInputEditor : Editor
     {
         SerializedProperty _eventType;
         SerializedProperty _channel;
@@ -83,10 +83,10 @@ namespace Klak.Midi
             EditorGUILayout.PropertyField(_channel);
 
             var showAllEvents = _eventType.hasMultipleDifferentValues;
-            var eventType = (MidiNoteEventSender.EventType)_eventType.enumValueIndex;
+            var eventType = (NoteInput.EventType)_eventType.enumValueIndex;
 
             if (showAllEvents ||
-                eventType == MidiNoteEventSender.EventType.Gate)
+                eventType == NoteInput.EventType.Gate)
             {
                 EditorGUILayout.PropertyField(_voiceMode);
             }
@@ -94,29 +94,29 @@ namespace Klak.Midi
             EditorGUILayout.PropertyField(_noteFilter);
 
             var showAllFilters = _noteFilter.hasMultipleDifferentValues;
-            var noteFilter = (MidiNoteEventSender.NoteFilter)_noteFilter.enumValueIndex;
+            var noteFilter = (NoteInput.NoteFilter)_noteFilter.enumValueIndex;
 
             if (showAllFilters ||
-                noteFilter == MidiNoteEventSender.NoteFilter.NoteName)
+                noteFilter == NoteInput.NoteFilter.NoteName)
             {
                 EditorGUILayout.PropertyField(_noteName);
             }
 
             if (showAllFilters ||
-                noteFilter == MidiNoteEventSender.NoteFilter.NoteNumber)
+                noteFilter == NoteInput.NoteFilter.NoteNumber)
             {
                 EditorGUILayout.PropertyField(_lowestNote);
                 EditorGUILayout.PropertyField(_highestNote);
             }
 
             if (showAllEvents ||
-                eventType != MidiNoteEventSender.EventType.Toggle)
+                eventType != NoteInput.EventType.Toggle)
             {
                 EditorGUILayout.PropertyField(_velocityOffset);
             }
 
             if (showAllEvents ||
-                eventType == MidiNoteEventSender.EventType.Value)
+                eventType == NoteInput.EventType.Value)
             {
                 EditorGUILayout.PropertyField(_offValue);
                 EditorGUILayout.PropertyField(_onValue);
@@ -124,27 +124,27 @@ namespace Klak.Midi
             }
 
             if (showAllEvents ||
-                eventType == MidiNoteEventSender.EventType.Trigger)
+                eventType == NoteInput.EventType.Trigger)
             {
                 EditorGUILayout.PropertyField(_triggerEvent);
             }
 
             if (showAllEvents ||
-                eventType == MidiNoteEventSender.EventType.Gate)
+                eventType == NoteInput.EventType.Gate)
             {
                 EditorGUILayout.PropertyField(_noteOnEvent);
                 EditorGUILayout.PropertyField(_noteOffEvent);
             }
 
             if (showAllEvents ||
-                eventType == MidiNoteEventSender.EventType.Toggle)
+                eventType == NoteInput.EventType.Toggle)
             {
                 EditorGUILayout.PropertyField(_toggleOnEvent);
                 EditorGUILayout.PropertyField(_toggleOffEvent);
             }
 
             if (showAllEvents ||
-                eventType == MidiNoteEventSender.EventType.Value)
+                eventType == NoteInput.EventType.Value)
             {
                 EditorGUILayout.PropertyField(_valueEvent);
             }

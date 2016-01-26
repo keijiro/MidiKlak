@@ -27,8 +27,8 @@ using UnityEditor;
 namespace Klak.Midi
 {
     [CanEditMultipleObjects]
-    [CustomEditor(typeof(MidiKnobEventSender))]
-    public class MidiKnobEventSenderEditor : Editor
+    [CustomEditor(typeof(KnobInput))]
+    public class KnobInputEditor : Editor
     {
         SerializedProperty _channel;
         SerializedProperty _knobNumber;

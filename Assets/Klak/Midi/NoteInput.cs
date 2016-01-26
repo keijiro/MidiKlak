@@ -1,5 +1,5 @@
 //
-// MidiKlak - MIDI extension for Klak
+// MidiKlack - MIDI extension for Klak
 //
 // Copyright (C) 2016 Keijiro Takahashi
 //
@@ -29,7 +29,8 @@ using MidiJack;
 
 namespace Klak.Midi
 {
-    public class MidiNoteEventSender : MonoBehaviour
+    [AddComponentMenu("Klak/MIDI/Note Input")]
+    public class NoteInput : MonoBehaviour
     {
         #region Nested Public Classes
 
