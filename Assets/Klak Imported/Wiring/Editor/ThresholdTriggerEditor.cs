@@ -1,5 +1,5 @@
 //
-// MidiKlak - MIDI extension for Klak
+// Klak - Utilities for creative coding with Unity
 //
 // Copyright (C) 2016 Keijiro Takahashi
 //
@@ -22,57 +22,39 @@
 // THE SOFTWARE.
 //
 using UnityEngine;
-using UnityEngine.Events;
-using System;
-using Klak.Math;
-using MidiJack;
+using UnityEditor;
 
-namespace Klak.Midi
+namespace Klak.Wiring
 {
-    public class MidiKnobEventSender : MonoBehaviour
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(ThresholdTrigger))]
+    public class ThresholdTriggerEditor : Editor
     {
-        #region Nested Public Classes
+        SerializedProperty _threshold;
+        SerializedProperty _delayToOff;
+        SerializedProperty _onEvent;
+        SerializedProperty _offEvent;
 
-        [Serializable]
-        public class KnobEvent : UnityEvent<float> {}
-
-        #endregion
-
-        #region Editable Properties
-
-        [SerializeField]
-        MidiChannel _channel = MidiChannel.All;
-
-        [SerializeField]
-        int _knobNumber = 0;
-
-        [SerializeField]
-        FloatInterpolator.Config _interpolator;
-
-        [SerializeField]
-        KnobEvent _knobEvent;
-
-        #endregion
-
-        #region Private Variables
-
-        FloatInterpolator _value;
-
-        #endregion
-
-        #region MonoBehaviour Functions
-
-        void Start()
+        void OnEnable()
         {
-            _value = new FloatInterpolator(0, _interpolator);
+            _threshold = serializedObject.FindProperty("_threshold");
+            _delayToOff = serializedObject.FindProperty("_delayToOff");
+            _onEvent = serializedObject.FindProperty("_onEvent");
+            _offEvent = serializedObject.FindProperty("_offEvent");
         }
 
-        void Update()
+        public override void OnInspectorGUI()
         {
-            _value.targetValue = MidiMaster.GetKnob(_channel, _knobNumber);
-            _knobEvent.Invoke(_value.Step());
-        }
+            serializedObject.Update();
 
-        #endregion
+            GUIHelper.ShowInputValueNote();
+
+            EditorGUILayout.PropertyField(_threshold);
+            EditorGUILayout.PropertyField(_delayToOff);
+            EditorGUILayout.PropertyField(_onEvent);
+            EditorGUILayout.PropertyField(_offEvent);
+
+            serializedObject.ApplyModifiedProperties();
+        }
     }
 }

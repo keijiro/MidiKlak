@@ -1,5 +1,5 @@
 //
-// MidiKlak - MIDI extension for Klak
+// Klak - Utilities for creative coding with Unity
 //
 // Copyright (C) 2016 Keijiro Takahashi
 //
@@ -24,53 +24,59 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System;
-using Klak.Math;
-using MidiJack;
 
-namespace Klak.Midi
+namespace Klak.Wiring
 {
-    public class MidiKnobEventSender : MonoBehaviour
+    [AddComponentMenu("Klak/Wiring/Color Map")]
+    public class ColorMap : MonoBehaviour
     {
         #region Nested Public Classes
 
+        public enum ColorMode { Gradient, ColorArray }
+
         [Serializable]
-        public class KnobEvent : UnityEvent<float> {}
+        public class ColorEvent : UnityEvent<Color> {}
 
         #endregion
 
         #region Editable Properties
 
         [SerializeField]
-        MidiChannel _channel = MidiChannel.All;
+        ColorMode _colorMode = ColorMode.Gradient;
 
         [SerializeField]
-        int _knobNumber = 0;
+        Gradient _gradient = new Gradient();
 
         [SerializeField]
-        FloatInterpolator.Config _interpolator;
+        [ColorUsage(true, true, 0, 16, 0.125f, 3)]
+        Color[] _colorArray = new Color[2] { Color.black, Color.white };
 
         [SerializeField]
-        KnobEvent _knobEvent;
+        ColorEvent _colorEvent;
 
         #endregion
 
-        #region Private Variables
+        #region Public Properties
 
-        FloatInterpolator _value;
+        public float inputValue {
+            set {
+                if (_colorMode == ColorMode.Gradient)
+                {
+                    _colorEvent.Invoke(_gradient.Evaluate(value));
+                }
+                else // ColorArray
+                {
+                    var len = _colorArray.Length;
 
-        #endregion
+                    var idx = Mathf.FloorToInt(value * (len - 1));
+                    idx = Mathf.Clamp(idx, 0, len - 2);
 
-        #region MonoBehaviour Functions
+                    var x = value * (len - 1) - idx;
+                    var y = Color.Lerp(_colorArray[idx], _colorArray[idx + 1], x);
 
-        void Start()
-        {
-            _value = new FloatInterpolator(0, _interpolator);
-        }
-
-        void Update()
-        {
-            _value.targetValue = MidiMaster.GetKnob(_channel, _knobNumber);
-            _knobEvent.Invoke(_value.Step());
+                    _colorEvent.Invoke(y);
+                }
+            }
         }
 
         #endregion

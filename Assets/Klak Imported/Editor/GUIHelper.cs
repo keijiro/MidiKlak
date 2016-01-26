@@ -1,5 +1,5 @@
 //
-// MidiKlak - MIDI extension for Klak
+// Klak - Utilities for creative coding with Unity
 //
 // Copyright (C) 2016 Keijiro Takahashi
 //
@@ -22,57 +22,17 @@
 // THE SOFTWARE.
 //
 using UnityEngine;
-using UnityEngine.Events;
-using System;
-using Klak.Math;
-using MidiJack;
+using UnityEditor;
 
-namespace Klak.Midi
+namespace Klak
 {
-    public class MidiKnobEventSender : MonoBehaviour
+    public static class GUIHelper
     {
-        #region Nested Public Classes
-
-        [Serializable]
-        public class KnobEvent : UnityEvent<float> {}
-
-        #endregion
-
-        #region Editable Properties
-
-        [SerializeField]
-        MidiChannel _channel = MidiChannel.All;
-
-        [SerializeField]
-        int _knobNumber = 0;
-
-        [SerializeField]
-        FloatInterpolator.Config _interpolator;
-
-        [SerializeField]
-        KnobEvent _knobEvent;
-
-        #endregion
-
-        #region Private Variables
-
-        FloatInterpolator _value;
-
-        #endregion
-
-        #region MonoBehaviour Functions
-
-        void Start()
+        public static void ShowInputValueNote()
         {
-            _value = new FloatInterpolator(0, _interpolator);
+            EditorGUILayout.HelpBox(
+                "Receives float values from the inputValue property.",
+                MessageType.None);
         }
-
-        void Update()
-        {
-            _value.targetValue = MidiMaster.GetKnob(_channel, _knobNumber);
-            _knobEvent.Invoke(_value.Step());
-        }
-
-        #endregion
     }
 }

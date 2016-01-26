@@ -1,5 +1,5 @@
 //
-// MidiKlak - MIDI extension for Klak
+// Klak - Utilities for creative coding with Unity
 //
 // Copyright (C) 2016 Keijiro Takahashi
 //
@@ -22,57 +22,22 @@
 // THE SOFTWARE.
 //
 using UnityEngine;
-using UnityEngine.Events;
-using System;
-using Klak.Math;
-using MidiJack;
+using UnityEditor;
 
-namespace Klak.Midi
+namespace Klak.Wiring
 {
-    public class MidiKnobEventSender : MonoBehaviour
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(SystemPropertyMap))]
+    public class SystemPropertyEditor : Editor
     {
-        #region Nested Public Classes
-
-        [Serializable]
-        public class KnobEvent : UnityEvent<float> {}
-
-        #endregion
-
-        #region Editable Properties
-
-        [SerializeField]
-        MidiChannel _channel = MidiChannel.All;
-
-        [SerializeField]
-        int _knobNumber = 0;
-
-        [SerializeField]
-        FloatInterpolator.Config _interpolator;
-
-        [SerializeField]
-        KnobEvent _knobEvent;
-
-        #endregion
-
-        #region Private Variables
-
-        FloatInterpolator _value;
-
-        #endregion
-
-        #region MonoBehaviour Functions
-
-        void Start()
+        public override void OnInspectorGUI()
         {
-            _value = new FloatInterpolator(0, _interpolator);
+            EditorGUILayout.HelpBox(
+                "Currently supported properties are:\n" +
+                "Time - timeScale\n" +
+                "Physics - gravity\n" +
+                "Renderer - ambientIntensity, reflectionIntensity, fog, fogColor, fogDensity, fogStartDistance, fogEndDistance",
+                MessageType.None);
         }
-
-        void Update()
-        {
-            _value.targetValue = MidiMaster.GetKnob(_channel, _knobNumber);
-            _knobEvent.Invoke(_value.Step());
-        }
-
-        #endregion
     }
 }

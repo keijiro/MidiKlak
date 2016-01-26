@@ -1,5 +1,5 @@
 //
-// MidiKlak - MIDI extension for Klak
+// Klak - Utilities for creative coding with Unity
 //
 // Copyright (C) 2016 Keijiro Takahashi
 //
@@ -23,40 +23,85 @@
 //
 using UnityEngine;
 using UnityEngine.Events;
-using System;
 using Klak.Math;
-using MidiJack;
+using System;
 
-namespace Klak.Midi
+namespace Klak.Wiring
 {
-    public class MidiKnobEventSender : MonoBehaviour
+    [AddComponentMenu("Klak/Wiring/Multi-State Toggle")]
+    public class MultiStateToggle : MonoBehaviour
     {
         #region Nested Public Classes
 
+        public enum EventType { Trigger, Value }
+
         [Serializable]
-        public class KnobEvent : UnityEvent<float> {}
+        public class ValueEvent : UnityEvent<float> {}
 
         #endregion
 
         #region Editable Properties
 
         [SerializeField]
-        MidiChannel _channel = MidiChannel.All;
-
-        [SerializeField]
-        int _knobNumber = 0;
+        EventType _eventType = EventType.Trigger;
 
         [SerializeField]
         FloatInterpolator.Config _interpolator;
 
         [SerializeField]
-        KnobEvent _knobEvent;
+        UnityEvent[] _triggerEvents = new UnityEvent[1];
+
+        [SerializeField]
+        float[] _stateValues = new float[1];
+
+        [SerializeField]
+        ValueEvent _valueEvent;
 
         #endregion
 
-        #region Private Variables
+        #region Public Properties And Methods
 
+        public int stateCount {
+            get {
+                if (_eventType == EventType.Trigger)
+                    return _triggerEvents.Length;
+                else
+                    return _stateValues.Length;
+            }
+        }
+
+        public int currentState {
+            get { return _state; }
+            set {
+                _state = Mathf.Min(value, stateCount - 1);
+                SendTrigger();
+            }
+        }
+
+        public void Toggle()
+        {
+            _state = (_state + 1) % stateCount;
+            SendTrigger();
+        }
+
+        public void ResetState()
+        {
+            _state = 0;
+            SendTrigger();
+        }
+
+        #endregion
+
+        #region Private Variables And Methods
+
+        int _state;
         FloatInterpolator _value;
+
+        void SendTrigger()
+        {
+            if (_eventType == EventType.Trigger)
+                _triggerEvents[_state].Invoke();
+        }
 
         #endregion
 
@@ -69,8 +114,11 @@ namespace Klak.Midi
 
         void Update()
         {
-            _value.targetValue = MidiMaster.GetKnob(_channel, _knobNumber);
-            _knobEvent.Invoke(_value.Step());
+            if (_eventType == EventType.Value)
+            {
+                _value.targetValue = _stateValues[_state];
+                _valueEvent.Invoke(_value.Step());
+            }
         }
 
         #endregion

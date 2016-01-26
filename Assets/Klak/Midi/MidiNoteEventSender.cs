@@ -23,6 +23,8 @@
 //
 using UnityEngine;
 using UnityEngine.Events;
+using System;
+using Klak.Math;
 using MidiJack;
 
 namespace Klak.Midi
@@ -47,13 +49,13 @@ namespace Klak.Midi
             C, CSharp, D, DSharp, E, F, FSharp, G, GSharp, A, ASharp, B
         }
 
-        [System.Serializable]
+        [Serializable]
         public class NoteOnEvent : UnityEvent<int, float> {}
 
-        [System.Serializable]
+        [Serializable]
         public class NoteOffEvent : UnityEvent<int> {}
 
-        [System.Serializable]
+        [Serializable]
         public class ValueEvent : UnityEvent<float> {}
 
         #endregion

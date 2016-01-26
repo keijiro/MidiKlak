@@ -1,5 +1,5 @@
 //
-// MidiKlak - MIDI extension for Klak
+// Klak - Utilities for creative coding with Unity
 //
 // Copyright (C) 2016 Keijiro Takahashi
 //
@@ -24,39 +24,75 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System;
-using Klak.Math;
-using MidiJack;
 
-namespace Klak.Midi
+namespace Klak.Wiring
 {
-    public class MidiKnobEventSender : MonoBehaviour
+    [AddComponentMenu("Klak/Wiring/Value Animation")]
+    public class ValueAnimation : MonoBehaviour
     {
         #region Nested Public Classes
 
         [Serializable]
-        public class KnobEvent : UnityEvent<float> {}
+        public class ValueEvent : UnityEvent<float> {}
 
         #endregion
 
         #region Editable Properties
 
         [SerializeField]
-        MidiChannel _channel = MidiChannel.All;
+        AnimationCurve[] _animations = new AnimationCurve[1] {
+            AnimationCurve.Linear(0, 0, 1, 1)
+        };
 
         [SerializeField]
-        int _knobNumber = 0;
+        bool _playOnStart = true;
 
         [SerializeField]
-        FloatInterpolator.Config _interpolator;
+        float _speed = 1.0f;
 
         [SerializeField]
-        KnobEvent _knobEvent;
+        ValueEvent _valueEvent;
 
         #endregion
 
-        #region Private Variables
+        #region Public Properties And Methods
 
-        FloatInterpolator _value;
+        public float speed {
+            get { return _speed; }
+            set { _speed = value; }
+        }
+
+        public bool isPlaying { get; set; }
+        public float time { get; set; }
+
+        public int animationIndex {
+            get { return _animationIndex; }
+        }
+
+        public void Play(int index)
+        {
+            _animationIndex = Mathf.Clamp(index, 0, _animations.Length - 1);
+            isPlaying = true;
+            time = 0;
+        }
+
+        public void PlayNext()
+        {
+            _animationIndex = (_animationIndex + 1) % _animations.Length;
+            isPlaying = true;
+            time = 0;
+        }
+
+        public void TogglePlayState()
+        {
+            isPlaying = !isPlaying;
+        }
+
+        #endregion
+
+        #region Private Members
+
+        int _animationIndex;
 
         #endregion
 
@@ -64,13 +100,17 @@ namespace Klak.Midi
 
         void Start()
         {
-            _value = new FloatInterpolator(0, _interpolator);
+            isPlaying = _playOnStart;
         }
 
         void Update()
         {
-            _value.targetValue = MidiMaster.GetKnob(_channel, _knobNumber);
-            _knobEvent.Invoke(_value.Step());
+            if (isPlaying)
+            {
+                time += Time.deltaTime * _speed;
+                var v = _animations[_animationIndex].Evaluate(time);
+                _valueEvent.Invoke(v);
+            }
         }
 
         #endregion

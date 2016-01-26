@@ -1,5 +1,5 @@
 //
-// MidiKlak - MIDI extension for Klak
+// Klak - Utilities for creative coding with Unity
 //
 // Copyright (C) 2016 Keijiro Takahashi
 //
@@ -22,57 +22,28 @@
 // THE SOFTWARE.
 //
 using UnityEngine;
-using UnityEngine.Events;
-using System;
-using Klak.Math;
-using MidiJack;
+using UnityEditor;
 
-namespace Klak.Midi
+namespace Klak.System
 {
-    public class MidiKnobEventSender : MonoBehaviour
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(GlobalConfig))]
+    public class GlobalConfigEditor : Editor
     {
-        #region Nested Public Classes
+        SerializedProperty _hideCursor;
 
-        [Serializable]
-        public class KnobEvent : UnityEvent<float> {}
-
-        #endregion
-
-        #region Editable Properties
-
-        [SerializeField]
-        MidiChannel _channel = MidiChannel.All;
-
-        [SerializeField]
-        int _knobNumber = 0;
-
-        [SerializeField]
-        FloatInterpolator.Config _interpolator;
-
-        [SerializeField]
-        KnobEvent _knobEvent;
-
-        #endregion
-
-        #region Private Variables
-
-        FloatInterpolator _value;
-
-        #endregion
-
-        #region MonoBehaviour Functions
-
-        void Start()
+        void OnEnable()
         {
-            _value = new FloatInterpolator(0, _interpolator);
+            _hideCursor = serializedObject.FindProperty("_hideCursor");
         }
 
-        void Update()
+        public override void OnInspectorGUI()
         {
-            _value.targetValue = MidiMaster.GetKnob(_channel, _knobNumber);
-            _knobEvent.Invoke(_value.Step());
-        }
+            serializedObject.Update();
 
-        #endregion
+            EditorGUILayout.PropertyField(_hideCursor);
+
+            serializedObject.ApplyModifiedProperties();
+        }
     }
 }

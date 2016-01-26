@@ -24,7 +24,7 @@
 using UnityEngine;
 using System;
 
-namespace Klak
+namespace Klak.Math
 {
     public struct FloatInterpolator
     {
@@ -46,7 +46,11 @@ namespace Klak
                 set { _interpolationType = value; }
             }
 
-            [SerializeField, Range(0.1f, 20)]
+            public bool enabled {
+                get { return interpolationType != InterpolationType.Direct; }
+            }
+
+            [SerializeField, Range(0.1f, 50)]
             float _interpolationSpeed = 5;
 
             public float interpolationSpeed {
