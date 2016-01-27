@@ -52,6 +52,15 @@ namespace Klak.Midi
             EditorGUILayout.PropertyField(_interpolator);
             EditorGUILayout.PropertyField(_knobEvent);
 
+            if (EditorApplication.isPlaying &&
+                !serializedObject.isEditingMultipleObjects)
+            {
+                var instance = (KnobInput)target;
+                instance.InputValue = EditorGUILayout.Slider(
+                    "Input Value", instance.InputValue, 0, 1);
+                EditorUtility.SetDirty(target); // request repaint
+            }
+
             serializedObject.ApplyModifiedProperties();
         }
     }

@@ -55,13 +55,45 @@ namespace Klak.Midi
 
         #endregion
 
-        #region Private Variables
+        #region Private Variables And Methods
 
         FloatInterpolator _value;
+
+        void OnKnobUpdate(MidiChannel channel, int knobNumber, float knobValue)
+        {
+            if (_channel == MidiChannel.All || channel == _channel)
+            {
+                if (_knobNumber == knobNumber)
+                {
+                    _value.targetValue = knobValue;
+                    if (!_interpolator.enabled)
+                        _knobEvent.Invoke(_value.Step());
+                }
+            }
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        public float InputValue {
+            get { return _value.targetValue; }
+            set { _value.targetValue = value; }
+        }
 
         #endregion
 
         #region MonoBehaviour Functions
+
+        void OnEnable()
+        {
+            MidiMaster.knobDelegate += OnKnobUpdate;
+        }
+
+        void OnDisable()
+        {
+            MidiMaster.knobDelegate -= OnKnobUpdate;
+        }
 
         void Start()
         {
@@ -70,8 +102,8 @@ namespace Klak.Midi
 
         void Update()
         {
-            _value.targetValue = MidiMaster.GetKnob(_channel, _knobNumber);
-            _knobEvent.Invoke(_value.Step());
+            if (_interpolator.enabled)
+                _knobEvent.Invoke(_value.Step());
         }
 
         #endregion
