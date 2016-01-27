@@ -34,8 +34,12 @@ namespace Klak.Midi
     {
         #region Nested Public Classes
 
+        public enum EventType {
+            Value, Trigger, Toggle
+        }
+
         [Serializable]
-        public class KnobEvent : UnityEvent<float> {}
+        public class ValueEvent : UnityEvent<float> {}
 
         #endregion
 
@@ -48,37 +52,94 @@ namespace Klak.Midi
         int _knobNumber = 0;
 
         [SerializeField]
+        AnimationCurve _inputCurve = AnimationCurve.Linear(0, 0, 1, 1);
+
+        [SerializeField]
+        EventType _eventType = EventType.Value;
+
+        [SerializeField]
+        float _outputValue0 = 0.0f;
+
+        [SerializeField]
+        float _outputValue1 = 1.0f;
+
+        [SerializeField]
         FloatInterpolator.Config _interpolator;
 
         [SerializeField]
-        KnobEvent _knobEvent;
+        ValueEvent _valueEvent;
 
-        #endregion
+        [SerializeField]
+        UnityEvent _triggerEvent;
 
-        #region Private Variables And Methods
+        [SerializeField]
+        UnityEvent _toggleOnEvent;
 
-        FloatInterpolator _value;
-
-        void OnKnobUpdate(MidiChannel channel, int knobNumber, float knobValue)
-        {
-            if (_channel == MidiChannel.All || channel == _channel)
-            {
-                if (_knobNumber == knobNumber)
-                {
-                    _value.targetValue = knobValue;
-                    if (!_interpolator.enabled)
-                        _knobEvent.Invoke(_value.Step());
-                }
-            }
-        }
+        [SerializeField]
+        UnityEvent _toggleOffEvent;
 
         #endregion
 
         #region Public Properties
 
         public float InputValue {
-            get { return _value.targetValue; }
-            set { _value.targetValue = value; }
+            get { return _lastInputValue; }
+            set { DoKnobUpdate(value); }
+        }
+
+        #endregion
+
+        #region Private Variables And Methods
+
+        FloatInterpolator _value;
+        float _lastInputValue;
+        bool _toggleState;
+
+        float CalculateTargetValue(float knobValue)
+        {
+            var p = _inputCurve.Evaluate(knobValue);
+            return BasicMath.Lerp(_outputValue0, _outputValue1, p);
+        }
+
+        void OnKnobUpdate(MidiChannel channel, int knobNumber, float knobValue)
+        {
+            // do nothing if the setting doesn't match
+            if (_channel != MidiChannel.All && channel != _channel) return;
+            if (_knobNumber != knobNumber) return;
+            // do the actual process
+            DoKnobUpdate(_inputCurve.Evaluate(knobValue));
+        }
+
+        void DoKnobUpdate(float inputValue)
+        {
+            const float threshold = 0.5f;
+
+            if (_eventType == EventType.Value)
+            {
+                // update the target value for the interpolator
+                _value.targetValue =
+                    BasicMath.Lerp(_outputValue0, _outputValue1, inputValue);
+                // invoke the event in direct mode
+                if (!_interpolator.enabled)
+                    _valueEvent.Invoke(_value.Step());
+            }
+            else if (_lastInputValue < threshold && inputValue >= threshold)
+            {
+                if (_eventType == EventType.Trigger)
+                {
+                    _triggerEvent.Invoke();
+                }
+                else // EventType.Toggle
+                {
+                    _toggleState ^= true;
+                    if (_toggleState)
+                        _toggleOnEvent.Invoke();
+                    else
+                        _toggleOffEvent.Invoke();
+                }
+            }
+
+            _lastInputValue = inputValue;
         }
 
         #endregion
@@ -102,8 +163,8 @@ namespace Klak.Midi
 
         void Update()
         {
-            if (_interpolator.enabled)
-                _knobEvent.Invoke(_value.Step());
+            if (_eventType == EventType.Value &&_interpolator.enabled)
+                _valueEvent.Invoke(_value.Step());
         }
 
         #endregion

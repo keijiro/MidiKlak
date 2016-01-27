@@ -420,7 +420,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Klak.Midi.KnobInput
+  m_Text: 'Klak.Midi.KnobInput (value mode)
 
     Receives CC messages from MIDI devices and invokes float value events.
 
@@ -534,10 +534,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _channel: 16
   _knobNumber: 3
+  _inputCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 10
+    - time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 10
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  _eventType: 0
+  _outputValue0: 0
+  _outputValue1: 1
   _interpolator:
     _interpolationType: 2
     _interpolationSpeed: 5
-  _knobEvent:
+  _valueEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1101752027}
@@ -551,7 +569,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Klak.Midi.KnobInput+KnobEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    m_TypeName: Klak.Midi.KnobInput+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  _triggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  _toggleOnEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  _toggleOffEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
 --- !u!4 &1101752029
 Transform:
@@ -620,10 +653,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _channel: 16
   _knobNumber: 2
+  _inputCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  _eventType: 0
+  _outputValue0: 0
+  _outputValue1: 1
   _interpolator:
     _interpolationType: 2
     _interpolationSpeed: 5
-  _knobEvent:
+  _valueEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1444502143}
@@ -637,7 +688,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Klak.Midi.KnobInput+KnobEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    m_TypeName: Klak.Midi.KnobInput+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  _triggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  _toggleOnEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  _toggleOffEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
 --- !u!4 &1444502145
 Transform:
@@ -706,10 +772,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _channel: 16
   _knobNumber: 1
+  _inputCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  _eventType: 0
+  _outputValue0: 0
+  _outputValue1: 1
   _interpolator:
     _interpolationType: 2
     _interpolationSpeed: 5
-  _knobEvent:
+  _valueEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1605246296}
@@ -723,7 +807,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Klak.Midi.KnobInput+KnobEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    m_TypeName: Klak.Midi.KnobInput+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  _triggerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  _toggleOnEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  _toggleOffEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
 --- !u!4 &1605246298
 Transform:
