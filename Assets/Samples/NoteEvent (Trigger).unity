@@ -547,17 +547,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Klak.Midi.MidiNoteEventSender+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Klak.Midi.NoteInput+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   _noteOnEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Klak.Midi.MidiNoteEventSender+NoteOnEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Klak.Midi.NoteInput+NoteOnEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   _noteOffEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Klak.Midi.MidiNoteEventSender+NoteOffEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Klak.Midi.NoteInput+NoteOffEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   _toggleOnEvent:
     m_PersistentCalls:
@@ -594,7 +594,7 @@ MonoBehaviour:
   _valueEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Klak.Midi.MidiNoteEventSender+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Klak.Midi.NoteInput+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!4 &611358264
 Transform:
@@ -768,17 +768,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Klak.Midi.MidiNoteEventSender+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Klak.Midi.NoteInput+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   _noteOnEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Klak.Midi.MidiNoteEventSender+NoteOnEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Klak.Midi.NoteInput+NoteOnEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   _noteOffEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Klak.Midi.MidiNoteEventSender+NoteOffEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Klak.Midi.NoteInput+NoteOffEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   _toggleOnEvent:
     m_PersistentCalls:
@@ -815,7 +815,7 @@ MonoBehaviour:
   _valueEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Klak.Midi.MidiNoteEventSender+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Klak.Midi.NoteInput+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!4 &679216654
 Transform:
@@ -945,17 +945,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: Klak.Midi.MidiNoteEventSender+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Klak.Midi.NoteInput+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   _noteOnEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Klak.Midi.MidiNoteEventSender+NoteOnEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Klak.Midi.NoteInput+NoteOnEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   _noteOffEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Klak.Midi.MidiNoteEventSender+NoteOffEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Klak.Midi.NoteInput+NoteOffEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   _toggleOnEvent:
     m_PersistentCalls:
@@ -992,7 +992,7 @@ MonoBehaviour:
   _valueEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Klak.Midi.MidiNoteEventSender+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
+    m_TypeName: Klak.Midi.NoteInput+ValueEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!4 &1157746550
 Transform:
