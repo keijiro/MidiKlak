@@ -216,5 +216,36 @@ namespace Klak.Midi
         }
 
         #endregion
+
+        #if UNITY_EDITOR
+
+        #region Editor Methods
+
+        bool _debugInput;
+
+        public int debugNote
+        {
+            get {
+                if (_noteFilter == NoteFilter.NoteName)
+                    return (int)_noteName + 60; // C4
+                else
+                    return _lowestNote;
+            }
+        }
+
+        public bool debugInput {
+            get { return _debugInput; }
+            set {
+                if (!_debugInput)
+                    if (value) NoteOn(_channel, debugNote, 1);
+                else
+                    if (!value) NoteOff(_channel, debugNote);
+                _debugInput = value;
+            }
+        }
+
+        #endregion
+
+        #endif
     }
 }

@@ -149,6 +149,14 @@ namespace Klak.Midi
                 EditorGUILayout.PropertyField(_valueEvent);
             }
 
+            if (EditorApplication.isPlaying &&
+                !serializedObject.isEditingMultipleObjects)
+            {
+                var instance = (NoteInput)target;
+                instance.debugInput =
+                    EditorGUILayout.Toggle("Debug", instance.debugInput);
+            }
+
             serializedObject.ApplyModifiedProperties();
         }
     }
