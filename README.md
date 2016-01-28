@@ -2,7 +2,7 @@ MidiKlak
 ========
 
 *MidiKlak* is an extension for [Klak][Klak], that provides functionality for
-receiving MIDI events from physical/virtual MIDI devices.
+receiving MIDI messages from physical/virtual MIDI devices.
 
 ![gif](http://49.media.tumblr.com/6eb313a0e36f25195e470d59839a530a/tumblr_o1mcacuoft1qio469o1_400.gif)
 
@@ -12,11 +12,24 @@ System Requirements
 - Unity 5
 - Windows or Mac OS X
 
-*MidiKlak* has dependency to the packages below. Please import them before
+*MidiKlak* has dependency to the following packages. Please import them before
 installing *MidiKlak*.
 
 - [Klak][Klak]
 - [MidiJack][MidiJack]
+
+How To Use It
+-------------
+
+*MidiKlak* provides only two components -- **NoteInput** and **KnobInput**.
+
+- **NoteInput** - receives MIDI note messages and invokes Unity events
+  with input values (note number and velocity).
+- **KnobInput** - receives MIDI CC (control change) messages and invokes
+  Unity events with a single float value.
+
+For further details of usage, please refer the sample scenes in the "Samples"
+directory.
 
 [Klak]: https://github.com/keijiro/Klak
 [MidiJack]: https://github.com/keijiro/MidiJack
