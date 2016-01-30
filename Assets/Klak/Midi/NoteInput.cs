@@ -1,5 +1,5 @@
 //
-// MidiKlack - MIDI extension for Klak
+// MidiKlak - MIDI extension for Klak
 //
 // Copyright (C) 2016 Keijiro Takahashi
 //
