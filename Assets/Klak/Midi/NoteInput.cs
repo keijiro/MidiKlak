@@ -219,11 +219,11 @@ namespace Klak.Midi
 
         #if UNITY_EDITOR
 
-        #region Editor Methods
+        #region Editor Interface
 
         bool _debugInput;
 
-        public int debugNote
+        int debugNote
         {
             get {
                 if (_noteFilter == NoteFilter.NoteName)

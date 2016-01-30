@@ -80,15 +80,6 @@ namespace Klak.Midi
 
         #endregion
 
-        #region Public Properties
-
-        public float InputValue {
-            get { return _lastInputValue; }
-            set { DoKnobUpdate(value); }
-        }
-
-        #endregion
-
         #region Private Variables And Methods
 
         FloatInterpolator _value;
@@ -168,5 +159,18 @@ namespace Klak.Midi
         }
 
         #endregion
+
+        #if UNITY_EDITOR
+
+        #region Editor Interface
+
+        public float debugInput {
+            get { return _lastInputValue; }
+            set { DoKnobUpdate(value); }
+        }
+
+        #endregion
+
+        #endif
     }
 }

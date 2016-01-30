@@ -97,8 +97,8 @@ namespace Klak.Midi
                 !serializedObject.isEditingMultipleObjects)
             {
                 var instance = (KnobInput)target;
-                instance.InputValue =
-                    EditorGUILayout.Slider("Debug", instance.InputValue, 0, 1);
+                instance.debugInput =
+                    EditorGUILayout.Slider("Debug", instance.debugInput, 0, 1);
                 EditorUtility.SetDirty(target); // request repaint
             }
 
