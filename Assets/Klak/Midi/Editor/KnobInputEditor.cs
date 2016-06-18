@@ -32,33 +32,21 @@ namespace Klak.Midi
     {
         SerializedProperty _channel;
         SerializedProperty _knobNumber;
-        SerializedProperty _inputCurve;
-
-        SerializedProperty _eventType;
-        SerializedProperty _outputValue0;
-        SerializedProperty _outputValue1;
+        SerializedProperty _responseCurve;
         SerializedProperty _interpolator;
-
+        SerializedProperty _onEvent;
+        SerializedProperty _offEvent;
         SerializedProperty _valueEvent;
-        SerializedProperty _triggerEvent;
-        SerializedProperty _toggleOnEvent;
-        SerializedProperty _toggleOffEvent;
 
         void OnEnable()
         {
             _channel = serializedObject.FindProperty("_channel");
             _knobNumber = serializedObject.FindProperty("_knobNumber");
-            _inputCurve = serializedObject.FindProperty("_inputCurve");
-
-            _eventType = serializedObject.FindProperty("_eventType");
-            _outputValue0 = serializedObject.FindProperty("_outputValue0");
-            _outputValue1 = serializedObject.FindProperty("_outputValue1");
+            _responseCurve = serializedObject.FindProperty("_responseCurve");
             _interpolator = serializedObject.FindProperty("_interpolator");
-
+            _onEvent = serializedObject.FindProperty("_onEvent");
+            _offEvent = serializedObject.FindProperty("_offEvent");
             _valueEvent = serializedObject.FindProperty("_valueEvent");
-            _triggerEvent = serializedObject.FindProperty("_triggerEvent");
-            _toggleOnEvent = serializedObject.FindProperty("_toggleOnEvent");
-            _toggleOffEvent = serializedObject.FindProperty("_toggleOffEvent");
         }
 
         public override void OnInspectorGUI()
@@ -67,31 +55,17 @@ namespace Klak.Midi
 
             EditorGUILayout.PropertyField(_channel);
             EditorGUILayout.PropertyField(_knobNumber);
-            EditorGUILayout.PropertyField(_inputCurve);
 
             EditorGUILayout.Space();
 
-            var showAllOptions = _eventType.hasMultipleDifferentValues;
-            var eventType = (KnobInput.EventType)_eventType.enumValueIndex;
+            EditorGUILayout.PropertyField(_responseCurve);
+            EditorGUILayout.PropertyField(_interpolator);
 
-            EditorGUILayout.PropertyField(_eventType);
+            EditorGUILayout.Space();
 
-            if (showAllOptions || eventType == KnobInput.EventType.Value)
-            {
-                EditorGUILayout.PropertyField(_outputValue0);
-                EditorGUILayout.PropertyField(_outputValue1);
-                EditorGUILayout.PropertyField(_interpolator);
-                EditorGUILayout.PropertyField(_valueEvent);
-            }
-
-            if (showAllOptions || eventType == KnobInput.EventType.Trigger)
-                EditorGUILayout.PropertyField(_triggerEvent);
-
-            if (showAllOptions || eventType == KnobInput.EventType.Toggle)
-            {
-                EditorGUILayout.PropertyField(_toggleOnEvent);
-                EditorGUILayout.PropertyField(_toggleOffEvent);
-            }
+            EditorGUILayout.PropertyField(_onEvent);
+            EditorGUILayout.PropertyField(_offEvent);
+            EditorGUILayout.PropertyField(_valueEvent);
 
             if (EditorApplication.isPlaying &&
                 !serializedObject.isEditingMultipleObjects)

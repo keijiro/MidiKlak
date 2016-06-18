@@ -22,28 +22,16 @@
 // THE SOFTWARE.
 //
 using UnityEngine;
-using UnityEngine.Events;
-using System;
 using Klak.Math;
+using Klak.Wiring;
 using MidiJack;
 
 namespace Klak.Midi
 {
-    [AddComponentMenu("Klak/MIDI/Knob Input")]
-    public class KnobInput : MonoBehaviour
+    [AddComponentMenu("Klak/Wiring/Input/MIDI/Knob Input")]
+    public class KnobInput : NodeBase
     {
-        #region Nested Public Classes
-
-        public enum EventType {
-            Value, Trigger, Toggle
-        }
-
-        [Serializable]
-        public class ValueEvent : UnityEvent<float> {}
-
-        #endregion
-
-        #region Editable Properties
+        #region Editable properties
 
         [SerializeField]
         MidiChannel _channel = MidiChannel.All;
@@ -52,90 +40,67 @@ namespace Klak.Midi
         int _knobNumber = 0;
 
         [SerializeField]
-        AnimationCurve _inputCurve = AnimationCurve.Linear(0, 0, 1, 1);
+        AnimationCurve _responseCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
         [SerializeField]
-        EventType _eventType = EventType.Value;
-
-        [SerializeField]
-        float _outputValue0 = 0.0f;
-
-        [SerializeField]
-        float _outputValue1 = 1.0f;
-
-        [SerializeField]
-        FloatInterpolator.Config _interpolator;
-
-        [SerializeField]
-        ValueEvent _valueEvent;
-
-        [SerializeField]
-        UnityEvent _triggerEvent;
-
-        [SerializeField]
-        UnityEvent _toggleOnEvent;
-
-        [SerializeField]
-        UnityEvent _toggleOffEvent;
+        FloatInterpolator.Config _interpolator = new FloatInterpolator.Config(
+            FloatInterpolator.Config.InterpolationType.DampedSpring, 30
+        );
 
         #endregion
 
-        #region Private Variables And Methods
+        #region Node I/O
 
-        FloatInterpolator _value;
+        [SerializeField, Outlet]
+        VoidEvent _onEvent = new VoidEvent();
+
+        [SerializeField, Outlet]
+        VoidEvent _offEvent = new VoidEvent();
+
+        [SerializeField, Outlet]
+        FloatEvent _valueEvent = new FloatEvent();
+
+        #endregion
+
+        #region Private members
+
+        FloatInterpolator _floatValue;
         float _lastInputValue;
-        bool _toggleState;
-
-        float CalculateTargetValue(float knobValue)
-        {
-            var p = _inputCurve.Evaluate(knobValue);
-            return BasicMath.Lerp(_outputValue0, _outputValue1, p);
-        }
 
         void OnKnobUpdate(MidiChannel channel, int knobNumber, float knobValue)
         {
-            // do nothing if the setting doesn't match
+            // Do nothing if the setting doesn't match.
             if (_channel != MidiChannel.All && channel != _channel) return;
             if (_knobNumber != knobNumber) return;
-            // do the actual process
-            DoKnobUpdate(_inputCurve.Evaluate(knobValue));
+            // Do the actual process.
+            DoKnobUpdate(knobValue);
         }
 
         void DoKnobUpdate(float inputValue)
         {
             const float threshold = 0.5f;
 
-            if (_eventType == EventType.Value)
-            {
-                // update the target value for the interpolator
-                _value.targetValue =
-                    BasicMath.Lerp(_outputValue0, _outputValue1, inputValue);
-                // invoke the event in direct mode
-                if (!_interpolator.enabled)
-                    _valueEvent.Invoke(_value.Step());
-            }
-            else if (_lastInputValue < threshold && inputValue >= threshold)
-            {
-                if (_eventType == EventType.Trigger)
-                {
-                    _triggerEvent.Invoke();
-                }
-                else // EventType.Toggle
-                {
-                    _toggleState ^= true;
-                    if (_toggleState)
-                        _toggleOnEvent.Invoke();
-                    else
-                        _toggleOffEvent.Invoke();
-                }
-            }
+            // Update the target value for the interpolator.
+            _floatValue.targetValue = _responseCurve.Evaluate(inputValue);
+
+            // Invoke the event in direct mode.
+            if (!_interpolator.enabled)
+                _valueEvent.Invoke(_floatValue.Step());
+
+            // Detect an on-event and invoke the event.
+            if (_lastInputValue < threshold && inputValue >= threshold)
+                _onEvent.Invoke();
+
+            // Detect an ooff-event and invoke the event.
+            if (inputValue < threshold && _lastInputValue >= threshold)
+                _offEvent.Invoke();
 
             _lastInputValue = inputValue;
         }
 
         #endregion
 
-        #region MonoBehaviour Functions
+        #region MonoBehaviour functions
 
         void OnEnable()
         {
@@ -149,20 +114,24 @@ namespace Klak.Midi
 
         void Start()
         {
-            _value = new FloatInterpolator(0, _interpolator);
+            _lastInputValue = MidiMaster.GetKnob(_channel, _knobNumber);
+
+            _floatValue = new FloatInterpolator(
+                _responseCurve.Evaluate(_lastInputValue), _interpolator
+            );
         }
 
         void Update()
         {
-            if (_eventType == EventType.Value &&_interpolator.enabled)
-                _valueEvent.Invoke(_value.Step());
+            if (_interpolator.enabled)
+                _valueEvent.Invoke(_floatValue.Step());
         }
 
         #endregion
 
         #if UNITY_EDITOR
 
-        #region Editor Interface
+        #region Editor interface
 
         public float debugInput {
             get { return _lastInputValue; }
