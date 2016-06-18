@@ -30,48 +30,38 @@ namespace Klak.Midi
     [CustomEditor(typeof(NoteInput))]
     public class NoteInputEditor : Editor
     {
-        SerializedProperty _eventType;
         SerializedProperty _channel;
-        SerializedProperty _voiceMode;
-        SerializedProperty _velocityOffset;
-
         SerializedProperty _noteFilter;
         SerializedProperty _noteName;
         SerializedProperty _lowestNote;
         SerializedProperty _highestNote;
 
+        SerializedProperty _velocityCurve;
         SerializedProperty _offValue;
         SerializedProperty _onValue;
         SerializedProperty _interpolator;
 
-        SerializedProperty _triggerEvent;
         SerializedProperty _noteOnEvent;
+        SerializedProperty _noteOnVelocityEvent;
         SerializedProperty _noteOffEvent;
-        SerializedProperty _toggleOnEvent;
-        SerializedProperty _toggleOffEvent;
         SerializedProperty _valueEvent;
 
         void OnEnable()
         {
-            _eventType = serializedObject.FindProperty("_eventType");
             _channel = serializedObject.FindProperty("_channel");
-            _voiceMode = serializedObject.FindProperty("_voiceMode");
-            _velocityOffset = serializedObject.FindProperty("_velocityOffset");
-
             _noteFilter = serializedObject.FindProperty("_noteFilter");
             _noteName = serializedObject.FindProperty("_noteName");
             _lowestNote = serializedObject.FindProperty("_lowestNote");
             _highestNote = serializedObject.FindProperty("_highestNote");
 
+            _velocityCurve = serializedObject.FindProperty("_velocityCurve");
             _offValue = serializedObject.FindProperty("_offValue");
             _onValue = serializedObject.FindProperty("_onValue");
             _interpolator = serializedObject.FindProperty("_interpolator");
 
-            _triggerEvent = serializedObject.FindProperty("_triggerEvent");
             _noteOnEvent = serializedObject.FindProperty("_noteOnEvent");
+            _noteOnVelocityEvent = serializedObject.FindProperty("_noteOnVelocityEvent");
             _noteOffEvent = serializedObject.FindProperty("_noteOffEvent");
-            _toggleOnEvent = serializedObject.FindProperty("_toggleOnEvent");
-            _toggleOffEvent = serializedObject.FindProperty("_toggleOffEvent");
             _valueEvent = serializedObject.FindProperty("_valueEvent");
         }
 
@@ -79,75 +69,32 @@ namespace Klak.Midi
         {
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(_eventType);
             EditorGUILayout.PropertyField(_channel);
-
-            var showAllEvents = _eventType.hasMultipleDifferentValues;
-            var eventType = (NoteInput.EventType)_eventType.enumValueIndex;
-
-            if (showAllEvents ||
-                eventType == NoteInput.EventType.Gate)
-            {
-                EditorGUILayout.PropertyField(_voiceMode);
-            }
-
             EditorGUILayout.PropertyField(_noteFilter);
 
-            var showAllFilters = _noteFilter.hasMultipleDifferentValues;
             var noteFilter = (NoteInput.NoteFilter)_noteFilter.enumValueIndex;
 
-            if (showAllFilters ||
-                noteFilter == NoteInput.NoteFilter.NoteName)
-            {
+            if (noteFilter == NoteInput.NoteFilter.NoteName)
                 EditorGUILayout.PropertyField(_noteName);
-            }
 
-            if (showAllFilters ||
-                noteFilter == NoteInput.NoteFilter.NoteNumber)
-            {
+            if (noteFilter == NoteInput.NoteFilter.NoteNumber) {
                 EditorGUILayout.PropertyField(_lowestNote);
                 EditorGUILayout.PropertyField(_highestNote);
             }
 
-            if (showAllEvents ||
-                eventType != NoteInput.EventType.Toggle)
-            {
-                EditorGUILayout.PropertyField(_velocityOffset);
-            }
+            EditorGUILayout.Space();
 
-            if (showAllEvents ||
-                eventType == NoteInput.EventType.Value)
-            {
-                EditorGUILayout.PropertyField(_offValue);
-                EditorGUILayout.PropertyField(_onValue);
-                EditorGUILayout.PropertyField(_interpolator);
-            }
+            EditorGUILayout.PropertyField(_velocityCurve);
+            EditorGUILayout.PropertyField(_offValue);
+            EditorGUILayout.PropertyField(_onValue);
+            EditorGUILayout.PropertyField(_interpolator);
 
-            if (showAllEvents ||
-                eventType == NoteInput.EventType.Trigger)
-            {
-                EditorGUILayout.PropertyField(_triggerEvent);
-            }
+            EditorGUILayout.Space();
 
-            if (showAllEvents ||
-                eventType == NoteInput.EventType.Gate)
-            {
-                EditorGUILayout.PropertyField(_noteOnEvent);
-                EditorGUILayout.PropertyField(_noteOffEvent);
-            }
-
-            if (showAllEvents ||
-                eventType == NoteInput.EventType.Toggle)
-            {
-                EditorGUILayout.PropertyField(_toggleOnEvent);
-                EditorGUILayout.PropertyField(_toggleOffEvent);
-            }
-
-            if (showAllEvents ||
-                eventType == NoteInput.EventType.Value)
-            {
-                EditorGUILayout.PropertyField(_valueEvent);
-            }
+            EditorGUILayout.PropertyField(_noteOnEvent);
+            EditorGUILayout.PropertyField(_noteOnVelocityEvent);
+            EditorGUILayout.PropertyField(_noteOffEvent);
+            EditorGUILayout.PropertyField(_valueEvent);
 
             if (EditorApplication.isPlaying &&
                 !serializedObject.isEditingMultipleObjects)
