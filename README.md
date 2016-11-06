@@ -1,3 +1,4 @@
+
 MidiKlak
 ========
 
@@ -31,8 +32,12 @@ How To Use It
 For further details of usage, please refer the sample scenes in the "Samples"
 directory.
 
+Also see [the troubleshooting topics][Troubleshoot] if you meet any problem
+in using MIDI devices.
+
 [Klak]: https://github.com/keijiro/Klak
 [MidiJack]: https://github.com/keijiro/MidiJack
+[Troubleshoot]: https://github.com/keijiro/MidiJack/wiki/Troubleshooting
 
 License
 -------
