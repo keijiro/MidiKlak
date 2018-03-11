@@ -1,0 +1,8 @@
+﻿{
+	"name": "MidiKlak",
+    "references": [
+        "Klak.Math",
+        "Klak.Wiring",
+        "MidiJack"
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "name": "MidiKlak.Editor",
+    "references": [
+        "MidiKlak",
+        "Klak.Wiring"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

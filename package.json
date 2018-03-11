@@ -1,0 +1,8 @@
+{
+    "name": "jp.keijiro.midiklak",
+    "displayName": "MidiKlak",
+    "version": "0.0.1",
+    "unity": "2018.1",
+    "description": "MidiKlak is an extension for Klak, that provides functionality for receiving MIDI messages from physical/virtual MIDI devices.",
+    "dependencies": { }
+}
