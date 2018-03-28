@@ -1,0 +1,7 @@
+﻿{
+    "name": "jp.keijiro.klak.midi.Runtime",
+    "references": [
+        "jp.keijiro.klak.Runtime",
+        "jp.keijiro.midi-jack.Runtime"
+    ]
+}

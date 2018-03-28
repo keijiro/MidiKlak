@@ -1,8 +1,8 @@
 {
-    "name": "MidiKlak.Editor",
+    "name": "jp.keijiro.klak.midi.Editor",
     "references": [
-        "MidiKlak",
-        "Klak.Wiring"
+        "jp.keijiro.klak.midi.Runtime",
+        "jp.keijiro.klak.Runtime"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [
